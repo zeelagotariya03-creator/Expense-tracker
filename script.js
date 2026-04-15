@@ -1,63 +1,113 @@
-const balance = document.getElementById("balance");
-const income = document.getElementById("income");
-const expense = document.getElementById("expense");
-const list = document.getElementById("list");
 const form = document.getElementById("form");
-const text = document.getElementById("text");
-const amount = document.getElementById("amount");
+const list = document.getElementById("list");
+const balance = document.getElementById("balance");
+const monthFilter = document.getElementById("monthFilter");
 
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+let chart;
 
-function updateUI() {
-list.innerHTML = "";
+/* Add Transaction */
+form.addEventListener("submit", e => {
+e.preventDefault();
 
-let amounts = transactions.map(t => t.amount);
+const item = {
+amount: +amount.value,
+category: category.value,
+date: date.value
+};
 
-let total = amounts.reduce((acc, item) => acc + item, 0).toFixed(2);
-let inc = amounts.filter(a => a > 0).reduce((acc, a) => acc + a, 0).toFixed(2);
-let exp = (
-amounts.filter(a => a < 0).reduce((acc, a) => acc + a, 0) * -1
-).toFixed(2);
+transactions.push(item);
 
-balance.textContent = total;
-income.textContent = inc;
-expense.textContent = exp;
-
-transactions.forEach((transaction, index) => {
-const li = document.createElement("li");
-
-li.innerHTML = `
-${transaction.text} <span>₹${transaction.amount}</span>
-<button onclick="removeTransaction(${index})">❌</button>
-`;
-
-list.appendChild(li);
+save();
+render();
+form.reset();
 });
 
+/* Save */
+function save() {
 localStorage.setItem("transactions", JSON.stringify(transactions));
 }
 
-function addTransaction(e){
-e.preventDefault();
+/* Render */
+function render() {
+list.innerHTML = "";
 
-const newTransaction = {
-text: text.value,
-amount: +amount.value
+let filtered = transactions;
+
+if (monthFilter.value !== "all") {
+filtered = transactions.filter(t => t.date === monthFilter.value);
+}
+
+let total = filtered.reduce((a, b) => a + b.amount, 0);
+balance.textContent = total.toFixed(2);
+
+filtered.forEach((t, i) => {
+list.innerHTML += `
+<li>
+${t.category}
+<span>₹${t.amount}</span>
+</li>`;
+});
+
+loadMonths();
+drawChart(filtered);
+}
+
+/* Load Month Options */
+function loadMonths() {
+let months = [...new Set(transactions.map(t => t.date))];
+
+monthFilter.innerHTML = `<option value="all">All Months</option>`;
+
+months.forEach(m => {
+monthFilter.innerHTML += `<option value="${m}">${m}</option>`;
+});
+}
+
+/* Filter */
+monthFilter.addEventListener("change", render);
+
+/* Chart */
+function drawChart(data) {
+let expenses = data.filter(t => t.amount < 0);
+
+let cats = {};
+
+expenses.forEach(t => {
+cats[t.category] = (cats[t.category] || 0) + Math.abs(t.amount);
+});
+
+if (chart) chart.destroy();
+
+chart = new Chart(document.getElementById("chart"), {
+type: "pie",
+data: {
+labels: Object.keys(cats),
+datasets: [{
+data: Object.values(cats)
+}]
+}
+});
+}
+
+/* CSV Export */
+function downloadCSV() {
+let csv = "Category,Amount,Month\n";
+
+transactions.forEach(t => {
+csv += `${t.category},${t.amount},${t.date}\n`;
+});
+
+let blob = new Blob([csv], { type: "text/csv" });
+let a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "transactions.csv";
+a.click();
+}
+
+/* Dark Mode */
+document.getElementById("themeBtn").onclick = () => {
+document.body.classList.toggle("dark");
 };
 
-transactions.push(newTransaction);
-
-text.value = "";
-amount.value = "";
-
-updateUI();
-}
-
-function removeTransaction(index){
-transactions.splice(index,1);
-updateUI();
-}
-
-form.addEventListener("submit", addTransaction);
-
-updateUI();
+render();

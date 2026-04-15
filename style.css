@@ -1,77 +1,92 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    padding: 30px;
-    display: flex;
-    justify-content: center;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
-.container {
-    background-color: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 400px;
+body{
+background:#f1f5f9;
+padding:20px;
+transition:0.3s;
 }
 
-h1,h2,h3 {
-    text-align: center;
+body.dark{
+background:#0f172a;
+color:white;
 }
 
-.summary {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
+.app{
+max-width:1000px;
+margin:auto;
 }
 
-.income, .expense {
-    width: 48%;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
 }
 
-.income {
-    background: #dcfce7;
+.grid,.top-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin:20px 0;
 }
 
-.expense {
-    background: #fee2e2;
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+body.dark .card{
+background:#1e293b;
 }
 
-input, button {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+form{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:10px;
 }
 
-button {
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    cursor: pointer;
+input,select,button{
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
 }
 
-button:hover {
-    opacity: 0.9;
+button{
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
+ul{
+list-style:none;
+max-height:350px;
+overflow:auto;
+padding:0;
 }
 
-li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin:8px 0;
-    background:#f1f5f9;
-    border-radius:8px;
+li{
+display:flex;
+justify-content:space-between;
+padding:10px;
+margin:8px 0;
+border-radius:8px;
+background:#e2e8f0;
+}
+
+body.dark li{
+background:#334155;
+}
+
+@media(max-width:768px){
+.grid,.top-grid{
+grid-template-columns:1fr;
+}
 }
