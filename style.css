@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 400px;
+}
+
+h1,h2,h3 {
+    text-align: center;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.income, .expense {
+    width: 48%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.income {
+    background: #dcfce7;
+}
+
+.expense {
+    background: #fee2e2;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, button {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+button {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin:8px 0;
+    background:#f1f5f9;
+    border-radius:8px;
+}
